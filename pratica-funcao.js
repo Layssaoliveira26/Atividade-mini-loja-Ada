@@ -46,7 +46,7 @@ const carrinho = [
 
 function adicionar(carrinho, produtoId, qtd) {
   if (carrinho.length === 0) {
-    carrinho.push({ produtoId, qtd });
+    carrinho.push({ produtoId: produtoId, quantidade: qtd });
     return;
   }
 
@@ -56,11 +56,17 @@ function adicionar(carrinho, produtoId, qtd) {
       return;
     }
   }
+
+  carrinho.push({ produtoId: produtoId, quantidade: qtd });
 }
 
 function remover(carrinho, produtoId) {
   if (carrinho.length === 0) {
     return;
+  }
+  const index = carrinho.findIndex((item) => item.produtoId === produtoId);
+  if (index !== -1) {
+    carrinho.splice(index, 1);
   }
 }
 
