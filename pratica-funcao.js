@@ -4,6 +4,9 @@ const produtos = [
   { id: 3, nome: "Máscara", preco: 25.0, estoque: 2 },
 ];
 
+const mapaProdutos = new Map();
+produtos.forEach(p => mapaProdutos.set(p.id, p));
+
 function filtrarProdutoPreco(min, max) {
   let filtro = produtos.filter(
     (produto) => produto.preco >= min && produto.preco <= max
@@ -95,8 +98,14 @@ function alterarQuantidade(carrinho, produtoId, novaQtd) {
 
 function calcularTotal(carrinho) {
   return carrinho.reduce((total, item) => {
-    const produto = produtos.find((prod) => prod.id === item.produtoId);
+    const produto = mapaProdutos.get(item.produtoId);
     return total + produto.preco * item.quantidade;
+  }, 0);
+}
+
+function contarQuantidadeDeItens(carrinho) {
+  return carrinho.reduce((qtd, item) => {
+    return qtd + item.quantidade;
   }, 0);
 }
 
@@ -116,39 +125,29 @@ let produtosOrdenados = ordenarProdutosPorPreco(produtos);
 console.log("Produtos ordenados por preço:", produtosOrdenados);
 
 //----HISTORICO----
-const historicoPedidos = [];
 
 const carrinho1 = [
+  { produtoId: 1, quantidade: 2 },
+  { produtoId: 2, quantidade: 1 },
+  { produtoId: 3, quantidade: 1 },
+];
+
+const carrinho2 = [
     {produtoId: 1, quantidade: 3},
     {produtoId: 2, quantidade: 2}
 ];
 
-const carrinho2 = [
+const carrinho3 = [
     {produtoId: 2, quantidade: 1},
     {produtoId: 3, quantidade: 1}   
 ];
 
-historicoPedidos.push({
-    carrinho: [...carrinho],
-    total: calcularTotal(carrinho)
-});
-historicoPedidos.push({
-    carrinho: [...carrinho1],
-    total: calcularTotal(carrinho1)
-});
-historicoPedidos.push({
-    carrinho: [...carrinho2],
-    total: calcularTotal(carrinho2)
-});
+const historico = new Map();
+historico.set(1, { total: calcularTotal(carrinho1), itens: contarQuantidadeDeItens(carrinho1) });
+historico.set(2, { total: calcularTotal(carrinho2), itens: contarQuantidadeDeItens(carrinho2) });
+historico.set(3, { total: calcularTotal(carrinho3), itens: contarQuantidadeDeItens(carrinho3) });
+
 
 console.log('Histórico de Pedidos:');
-for (let i = 0; i < historicoPedidos.length; i++) {
-    console.log(`Detalhes do Pedido ${i + 1}:`);
-    for (let j = 0; j < historicoPedidos[i].carrinho.length; j++) {
-        const item = historicoPedidos[i].carrinho[j];
-        const produto = produtos.find(prod => prod.id === item.produtoId);
-        console.log(`  Produto: ${produto.nome} | Quantidade: ${item.quantidade} | Preço: R$ ${produto.preco.toFixed(2)}`);
-    }
-    console.log(`Total do Pedido ${i + 1}: R$ ${historicoPedidos[i].total.toFixed(2)}`);
-}
+console.log(historico)
 
