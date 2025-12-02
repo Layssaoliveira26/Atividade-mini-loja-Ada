@@ -77,7 +77,7 @@ function alterarQuantidade(carrinho, produtoId, novaQtd) {
 
   const item = produtos.find((item) => item.id === produtoId);
 
-  if (!item) {
+  if (item) {
     if (novaQtd > item.estoque) {
       console.log(
         `Quantidade solicitada para ${item.nome} excede o estoque disponível.`
@@ -100,14 +100,55 @@ function calcularTotal(carrinho) {
   }, 0);
 }
 
+console.log("Carrinho original:", carrinho);
+console.log("Total original: R$", calcularTotal(carrinho).toFixed(2));
+
 //EXTRA
+
+//----ORDENAR POR PREÇO----
 function ordenarProdutosPorPreco(produtos) {
   return [...produtos].sort((produtoA, produtoB) => {
     return produtoA.preco - produtoB.preco;
   });
 }
 
-console.log("Carrinho original:", carrinho);
-console.log("Total original: R$", calcularTotal(carrinho).toFixed(2));
 let produtosOrdenados = ordenarProdutosPorPreco(produtos);
 console.log("Produtos ordenados por preço:", produtosOrdenados);
+
+//----HISTORICO----
+const historicoPedidos = [];
+
+const carrinho1 = [
+    {produtoId: 1, quantidade: 3},
+    {produtoId: 2, quantidade: 2}
+];
+
+const carrinho2 = [
+    {produtoId: 2, quantidade: 1},
+    {produtoId: 3, quantidade: 1}   
+];
+
+historicoPedidos.push({
+    carrinho: [...carrinho],
+    total: calcularTotal(carrinho)
+});
+historicoPedidos.push({
+    carrinho: [...carrinho1],
+    total: calcularTotal(carrinho1)
+});
+historicoPedidos.push({
+    carrinho: [...carrinho2],
+    total: calcularTotal(carrinho2)
+});
+
+console.log('Histórico de Pedidos:');
+for (let i = 0; i < historicoPedidos.length; i++) {
+    console.log(`Detalhes do Pedido ${i + 1}:`);
+    for (let j = 0; j < historicoPedidos[i].carrinho.length; j++) {
+        const item = historicoPedidos[i].carrinho[j];
+        const produto = produtos.find(prod => prod.id === item.produtoId);
+        console.log(`  Produto: ${produto.nome} | Quantidade: ${item.quantidade} | Preço: R$ ${produto.preco.toFixed(2)}`);
+    }
+    console.log(`Total do Pedido ${i + 1}: R$ ${historicoPedidos[i].total.toFixed(2)}`);
+}
+
