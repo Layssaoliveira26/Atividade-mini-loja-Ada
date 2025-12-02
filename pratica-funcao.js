@@ -15,5 +15,21 @@ function atualizarEstoque(id, delta) {
     console.log(produtof)
 }
 
+function listar() {
+  return produtos;
+}
+
+function buscarPorNome(nome) {
+  return produtos.find(function (p) {
+    return p.nome === nome;
+  });
+}
+
+console.log("Atualização de Estoque:")
 atualizarEstoque(1, 20)
+console.log("Filtragem por faixa de preço:")
 filtrarProdutoPreco(5, 30)
+console.log("Lista de produtos:");
+console.log(listar());
+console.log("Produto desejado:");
+console.log(buscarPorNome("Xampu"));
