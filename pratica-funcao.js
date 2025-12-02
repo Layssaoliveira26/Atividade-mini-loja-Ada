@@ -33,3 +33,53 @@ console.log("Lista de produtos:");
 console.log(listar());
 console.log("Produto desejado:");
 console.log(buscarPorNome("Xampu"));
+
+//CARRINHO
+
+const carrinho = [
+    {produtoId: 1, quantidade: 2},
+    {produtoId: 2, quantidade: 1},
+    {produtoId: 3, quantidade: 1}   
+];
+
+function alterarQuantidade(carrinho, produtoId, novaQtd) {
+    if (novaQtd < 1) {
+        return carrinho.filter(item => item.produtoId !== produtoId);
+    }
+
+    const item = produtos.find(item => item.id === produtoId);
+  
+    if (!item) {
+       if (novaQtd > item.estoque) {
+        console.log(`Quantidade solicitada para ${item.nome} excede o estoque disponível.`);
+        return carrinho;
+        }
+        return carrinho.map(item => {
+            if (item.produtoId === produtoId) {
+                return {...item, quantidade: novaQtd};
+            }
+            return item;
+        });
+    }
+    
+}
+
+function calcularTotal(carrinho) {
+    return carrinho.reduce((total, item) => {
+        const produto = produtos.find(prod => prod.id === item.produtoId);
+        return total + (produto.preco * item.quantidade);
+    }, 0);
+}
+
+//EXTRA
+function ordenarProdutosPorPreco(produtos) {
+    return [...produtos].sort((produtoA, produtoB) => {
+        return produtoA.preco - produtoB.preco;
+    });
+}   
+
+console.log('Carrinho original:', carrinho);
+console.log('Total original: R$', calcularTotal(carrinho).toFixed(2));
+let produtosOrdenados = ordenarProdutosPorPreco(produtos);
+console.log('Produtos ordenados por preço:', produtosOrdenados);
+
