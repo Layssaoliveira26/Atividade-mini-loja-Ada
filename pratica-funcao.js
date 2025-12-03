@@ -30,8 +30,8 @@ function filtrarProdutoPreco(min, max) {
 }
 
 function atualizarEstoque(id, delta) {
-  let produtof = produtos.find((produto) => produto.id == id);
-  // let produtof = mapaProdutos.get(id);
+  // let produtof = produtos.find((produto) => produto.id == id);
+  let produtof = mapaProdutos.get(id);
   produtof.estoque += delta;
   console.log(produtof);
 }
