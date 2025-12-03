@@ -184,7 +184,7 @@ const carrinhoMap1 = new Map([
 ]);
 
 const carrinhoMap2 = new Map([
-  [1, { produtoId: 1, quantidade: 3 }],''
+  [1, { produtoId: 1, quantidade: 3 }],
   [2, { produtoId: 2, quantidade: 2 }]  
 ]);
 
