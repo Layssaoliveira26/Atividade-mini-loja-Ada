@@ -154,3 +154,12 @@ historico.set(3, { total: calcularTotal(carrinho3), itens: contarQuantidadeDeIte
 console.log('Histórico de Pedidos:');
 console.log(historico)
 
+//---- SORTEIO PROMO ----
+function sorteioPromo(listaProdutos) {
+  if (!Array.isArray(listaProdutos) || listaProdutos.length === 0) return null;
+  const index = Math.floor(Math.random() * listaProdutos.length);
+  return listaProdutos[index];
+}
+
+const produtoPromocao = sorteioPromo(produtos);
+console.log("Produto em promoção:", produtoPromocao);
