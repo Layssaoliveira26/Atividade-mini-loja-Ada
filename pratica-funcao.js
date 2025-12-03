@@ -47,30 +47,77 @@ const carrinho = [
   { produtoId: 3, quantidade: 1 },
 ];
 
-function adicionar(carrinho, produtoId, qtd) {
-  if (carrinho.length === 0) {
-    carrinho.push({ produtoId: produtoId, quantidade: qtd });
+const mapCarrinho = new Map();
+carrinho.forEach((p) => mapCarrinho.set(p.produtoId, p));
+
+function adicionar(mapCarrinho, produtoId, qtd) {
+  const produtoNoEstoque = mapaProdutos.get(produtoId);
+
+  try {
+    if (qtd <= 0) {
+      throw new Error(
+        "Não é possível adicionar itens ao carrinho com quantidade zero ou negativa"
+      );
+    }
+    if (!produtoNoEstoque) {
+      throw new Error("Produto não existe em estoque");
+    }
+    if (qtd > produtoNoEstoque.estoque) {
+      throw new Error(
+        "Quantidade de produtos para inserção no carrinho excede a quantidade em estoque"
+      );
+    }
+  } catch (error) {
+    console.error(error.message);
     return;
   }
 
-  for (let item of carrinho) {
-    if (item.produtoId === produtoId) {
-      item.qtd += qtd;
+  if (mapCarrinho.size === 0) {
+    mapCarrinho.set(produtoId, { produtoId: produtoId, quantidade: qtd });
       return;
     }
-  }
 
-  carrinho.push({ produtoId: produtoId, quantidade: qtd });
-}
+  const produtoNoCarrinho = mapCarrinho.get(produtoId);
 
-function remover(carrinho, produtoId) {
-  if (carrinho.length === 0) {
+  if (!produtoNoCarrinho) {
+    mapCarrinho.set(produtoId, { produtoId: produtoId, quantidade: qtd });
     return;
   }
-  const index = carrinho.findIndex((item) => item.produtoId === produtoId);
-  if (index !== -1) {
-    carrinho.splice(index, 1);
+
+  const quantidadeTotal = produtoNoCarrinho.quantidade + qtd;
+
+  try {
+    if (quantidadeTotal > produtoNoEstoque.estoque) {
+      throw new Error(
+        "Quantidade de produtos para inserção no carrinho excede a quantidade em estoque"
+      );
+    }
+    mapCarrinho.set(produtoId, {
+      produtoId: produtoId,
+      quantidade: quantidadeTotal,
+    });
+    return;
+  } catch (error) {
+    console.error(error.message);
+    return;
   }
+}
+
+function remover(mapCarrinho, produtoId) {
+  const protudoNoCarrinho = mapCarrinho.get(produtoId);
+  try {
+    if (mapCarrinho.size === 0) {
+      throw new Error("Não é possível remover itens de um carrinho vazio.");
+    }
+    if (!protudoNoCarrinho) {
+      throw new Error("Produto não encontrado no carrinho");
+    }
+  } catch (error) {
+    console.error(error.message);
+    return;
+  }
+
+  mapCarrinho.delete(produtoId);
 }
 
 function alterarQuantidade(carrinho, produtoId, novaQtd) {
