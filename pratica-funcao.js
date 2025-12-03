@@ -74,26 +74,23 @@ function remover(carrinho, produtoId) {
 }
 
 function alterarQuantidade(carrinho, produtoId, novaQtd) {
-  if (novaQtd < 1) {
-    return carrinho.filter((item) => item.produtoId !== produtoId);
-  }
-
-  const item = produtos.find((item) => item.id === produtoId);
-
-  if (item) {
-    if (novaQtd > item.estoque) {
-      console.log(
-        `Quantidade solicitada para ${item.nome} excede o estoque disponível.`
-      );
-      return carrinho;
+    const item = mapaProdutos.get(produtoId);
+    
+    if (!item) {
+        throw new Error('Produto não encontrado');
     }
+
+    if (novaQtd < 1 || novaQtd > item.estoque) {
+        throw new Error('Nova quantidade inválida');
+    }
+
     return carrinho.map((item) => {
-      if (item.produtoId === produtoId) {
+    if (item.produtoId === produtoId) {
         return { ...item, quantidade: novaQtd };
-      }
-      return item;
+    }
+    return item;
     });
-  }
+    
 }
 
 function calcularTotal(carrinho) {
@@ -109,10 +106,17 @@ function contarQuantidadeDeItens(carrinho) {
   }, 0);
 }
 
-console.log("Carrinho original:", carrinho);
-console.log("Total original: R$", calcularTotal(carrinho).toFixed(2));
+console.log("Carrinho:", carrinho);
+console.log("Total: R$", calcularTotal(carrinho).toFixed(2));
 
-//EXTRA
+try {    
+    const carrinhoAtualizado = alterarQuantidade(carrinho, 1, 5);
+    console.log(carrinhoAtualizado);
+} catch (error) {
+    console.error('Erro ao alterar quantidade:', error.message);
+}
+
+//EXTRAS
 
 //----ORDENAR POR PREÇO----
 function ordenarProdutosPorPreco(produtos) {
@@ -146,7 +150,6 @@ const historico = new Map();
 historico.set(1, { total: calcularTotal(carrinho1), itens: contarQuantidadeDeItens(carrinho1) });
 historico.set(2, { total: calcularTotal(carrinho2), itens: contarQuantidadeDeItens(carrinho2) });
 historico.set(3, { total: calcularTotal(carrinho3), itens: contarQuantidadeDeItens(carrinho3) });
-
 
 console.log('Histórico de Pedidos:');
 console.log(historico)
