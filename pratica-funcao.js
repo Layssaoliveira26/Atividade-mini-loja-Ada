@@ -17,10 +17,6 @@ function buscarPorNome(nome) {
   });
 }
 
-console.log("Atualização de Estoque:");
-atualizarEstoque(1, 20);
-console.log("Filtragem por faixa de preço:");
-filtrarProdutoPreco(5, 30);
 console.log("Lista de produtos:");
 console.log(listar());
 console.log("Produto desejado:");
@@ -34,10 +30,16 @@ function filtrarProdutoPreco(min, max) {
 }
 
 function atualizarEstoque(id, delta) {
-  let produtof = produtos.find((produto) => produto.id == id);
+  // let produtof = produtos.find((produto) => produto.id == id);
+  let produtof = mapaProdutos.get(id);
   produtof.estoque += delta;
   console.log(produtof);
 }
+
+console.log("Atualização de Estoque:");
+atualizarEstoque(1, 20);
+console.log("Filtragem por faixa de preço:");
+filtrarProdutoPreco(5, 30);
 
 //CARRINHO
 
