@@ -1,6 +1,6 @@
 const produtos = [
-  { id: 1, nome: "Sabonete", preco: 3.5, estoque: 10 },
-  { id: 2, nome: "Xampu", preco: 12.0, estoque: 5 },
+  { id: 1, nome: "Sabonete", preco: 12, estoque: 10 },
+  { id: 2, nome: "Xampu", preco: 3.5, estoque: 5 },
   { id: 3, nome: "Máscara", preco: 25.0, estoque: 2 },
 ];
 
@@ -17,11 +17,6 @@ function buscarPorNome(nome) {
   });
 }
 
-console.log("Lista de produtos:");
-console.log(listar());
-console.log("Produto desejado:");
-console.log(buscarPorNome("Xampu"));
-
 function filtrarProdutoPreco(min, max) {
   let filtro = produtos.filter(
     (produto) => produto.preco >= min && produto.preco <= max
@@ -36,21 +31,7 @@ function atualizarEstoque(id, delta) {
   console.log(produtof);
 }
 
-console.log("Atualização de Estoque:");
-atualizarEstoque(1, 20);
-console.log("Filtragem por faixa de preço:");
-filtrarProdutoPreco(5, 30);
-
 //CARRINHO
-
-const carrinho = [
-  { produtoId: 1, quantidade: 2 },
-  { produtoId: 2, quantidade: 1 },
-  { produtoId: 3, quantidade: 1 },
-];
-
-const mapCarrinho = new Map();
-carrinho.forEach((p) => mapCarrinho.set(p.produtoId, p));
 
 function adicionar(mapCarrinho, produtoId, qtd) {
   const produtoNoEstoque = mapaProdutos.get(produtoId);
@@ -156,13 +137,6 @@ function contarQuantidadeDeItens(carrinho) {
   }, 0);
 }
 
-console.log("Carrinho:", mapCarrinho);
-console.log("Total: R$", calcularTotal(mapCarrinho).toFixed(2));
-
-const carrinhoAtualizado = alterarQuantidade(mapCarrinho, 1, 5);
-console.log(carrinhoAtualizado);
-
-
 //EXTRAS
 
 //----ORDENAR POR PREÇO----
@@ -171,9 +145,6 @@ function ordenarProdutosPorPreco(produtos) {
     return produtoA.preco - produtoB.preco;
   });
 }
-
-let produtosOrdenados = ordenarProdutosPorPreco(produtos);
-console.log("Produtos ordenados por preço:", produtosOrdenados);
 
 //----HISTORICO----
 
@@ -195,9 +166,6 @@ historico.set(1, { total: calcularTotal(carrinhoMap1), itens: contarQuantidadeDe
 historico.set(2, { total: calcularTotal(carrinhoMap2), itens: contarQuantidadeDeItens(carrinhoMap2) });
 historico.set(3, { total: calcularTotal(carrinhoMap3), itens: contarQuantidadeDeItens(carrinhoMap3) });
 
-console.log('Histórico de Pedidos:');
-console.log(historico)
-
 //---- SORTEIO PROMO ----
 function sorteioPromo(listaProdutos) {
   if (!Array.isArray(listaProdutos) || listaProdutos.length === 0) return null;
@@ -205,5 +173,48 @@ function sorteioPromo(listaProdutos) {
   return listaProdutos[index];
 }
 
-const produtoPromocao = sorteioPromo(produtos);
-console.log("Produto em promoção:", produtoPromocao);
+//TESTES
+console.log("===== Listar produtos =====");
+console.log(listar(), "\n");
+
+console.log("===== Buscar por nome =====");
+console.log("Produto desejado: Xampu");
+console.log(buscarPorNome("Xampu"), "\n");
+
+console.log("===== Atualizar estoque =====");
+console.log("Atualiza o produto Sabonete adicionando 20 unidades");
+atualizarEstoque(1, 20);
+console.log();
+
+console.log("===== Filtrar por faixa de preço =====");
+console.log("Filtra produtos com preço entre 5 e 30");
+filtrarProdutoPreco(5, 30);
+console.log();
+
+console.log("===== Adicionar ao carrinho =====");
+const mapCarrinho = new Map();
+adicionar(mapCarrinho, 1, 5);
+adicionar(mapCarrinho, 2, 3);
+adicionar(mapCarrinho, 3, 2);
+console.log(mapCarrinho, "\n");
+
+console.log("===== Remover do carrinho =====");
+remover(mapCarrinho, 1);
+console.log(mapCarrinho, "\n");
+
+console.log("===== Total do carrinho =====");
+console.log("R$", calcularTotal(mapCarrinho).toFixed(2), "\n");
+
+console.log("===== Alterar quantidade no carrinho =====");
+console.log(alterarQuantidade(mapCarrinho, 2, 5), "\n");
+
+console.log("===== Ordenar produtos por preço =====");
+let produtosOrdenados = ordenarProdutosPorPreco(produtos);
+console.log("Produtos ordenados por preço:", produtosOrdenados, "\n");
+
+
+console.log("===== Histórico de Pedidos =====");
+console.log(historico, "\n")
+
+console.log("===== Produto em promoção =====");
+console.log(sorteioPromo(produtos), "\n");
