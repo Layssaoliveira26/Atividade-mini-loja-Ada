@@ -29,16 +29,17 @@ function filtrarProdutoPreco(min, max) {
   console.log(filtro);
 }
 
+function atualizarEstoque(id, delta) {
+  let produtof = produtos.find((produto) => produto.id == id);
+  // let produtof = mapaProdutos.get(id);
+  produtof.estoque += delta;
+  console.log(produtof);
+}
+
 console.log("Atualização de Estoque:");
 atualizarEstoque(1, 20);
 console.log("Filtragem por faixa de preço:");
 filtrarProdutoPreco(5, 30);
-
-function atualizarEstoque(id, delta) {
-  let produtof = produtos.find((produto) => produto.id == id);
-  produtof.estoque += delta;
-  console.log(produtof);
-}
 
 //CARRINHO
 
