@@ -77,7 +77,7 @@ function adicionar(mapCarrinho, produtoId, qtd) {
   if (mapCarrinho.size === 0) {
     mapCarrinho.set(produtoId, { produtoId: produtoId, quantidade: qtd });
       return;
-    }
+  }
 
   const produtoNoCarrinho = mapCarrinho.get(produtoId);
 
@@ -125,45 +125,43 @@ function remover(mapCarrinho, produtoId) {
 function alterarQuantidade(carrinho, produtoId, novaQtd) {
     const item = mapaProdutos.get(produtoId);
     
-    if (!item) {
+    try{
+      if (!item) {
         throw new Error('Produto não encontrado');
-    }
+      }
 
-    if (novaQtd < 1 || novaQtd > item.estoque) {
+      if (novaQtd < 1 || novaQtd > item.estoque) {
         throw new Error('Nova quantidade inválida');
+      }
+      carrinho.set(produtoId, { produtoId: produtoId, quantidade: novaQtd });
+      return carrinho;
+    }catch (error) {
+      console.error('Erro ao alterar quantidade:', error.message);
+      return;
     }
-
-    return carrinho.map((item) => {
-    if (item.produtoId === produtoId) {
-        return { ...item, quantidade: novaQtd };
-    }
-    return item;
-    });
     
 }
 
 function calcularTotal(carrinho) {
-  return carrinho.reduce((total, item) => {
+  return Array.from(carrinho.values()).reduce((total, item) => {
     const produto = mapaProdutos.get(item.produtoId);
     return total + produto.preco * item.quantidade;
   }, 0);
+
 }
 
 function contarQuantidadeDeItens(carrinho) {
-  return carrinho.reduce((qtd, item) => {
+  return Array.from(carrinho.values()).reduce((qtd, item) => {
     return qtd + item.quantidade;
   }, 0);
 }
 
-console.log("Carrinho:", carrinho);
-console.log("Total: R$", calcularTotal(carrinho).toFixed(2));
+console.log("Carrinho:", mapCarrinho);
+console.log("Total: R$", calcularTotal(mapCarrinho).toFixed(2));
 
-try {    
-    const carrinhoAtualizado = alterarQuantidade(carrinho, 1, 5);
-    console.log(carrinhoAtualizado);
-} catch (error) {
-    console.error('Erro ao alterar quantidade:', error.message);
-}
+const carrinhoAtualizado = alterarQuantidade(mapCarrinho, 1, 5);
+console.log(carrinhoAtualizado);
+
 
 //EXTRAS
 
@@ -179,26 +177,26 @@ console.log("Produtos ordenados por preço:", produtosOrdenados);
 
 //----HISTORICO----
 
-const carrinho1 = [
-  { produtoId: 1, quantidade: 2 },
-  { produtoId: 2, quantidade: 1 },
-  { produtoId: 3, quantidade: 1 },
-];
+const carrinhoMap1 = new Map([
+  [1, { produtoId: 1, quantidade: 2 }],
+  [2, { produtoId: 2, quantidade: 1 }],
+  [3, { produtoId: 3, quantidade: 1 }]
+]);
 
-const carrinho2 = [
-    {produtoId: 1, quantidade: 3},
-    {produtoId: 2, quantidade: 2}
-];
+const carrinhoMap2 = new Map([
+  [1, { produtoId: 1, quantidade: 3 }],''
+  [2, { produtoId: 2, quantidade: 2 }]  
+]);
 
-const carrinho3 = [
-    {produtoId: 2, quantidade: 1},
-    {produtoId: 3, quantidade: 1}   
-];
+const carrinhoMap3 = new Map([
+  [2, { produtoId: 2, quantidade: 1 }],
+  [3, { produtoId: 3, quantidade: 1 }]
+]);
 
 const historico = new Map();
-historico.set(1, { total: calcularTotal(carrinho1), itens: contarQuantidadeDeItens(carrinho1) });
-historico.set(2, { total: calcularTotal(carrinho2), itens: contarQuantidadeDeItens(carrinho2) });
-historico.set(3, { total: calcularTotal(carrinho3), itens: contarQuantidadeDeItens(carrinho3) });
+historico.set(1, { total: calcularTotal(carrinhoMap1), itens: contarQuantidadeDeItens(carrinhoMap1) });
+historico.set(2, { total: calcularTotal(carrinhoMap2), itens: contarQuantidadeDeItens(carrinhoMap2) });
+historico.set(3, { total: calcularTotal(carrinhoMap3), itens: contarQuantidadeDeItens(carrinhoMap3) });
 
 console.log('Histórico de Pedidos:');
 console.log(historico)
