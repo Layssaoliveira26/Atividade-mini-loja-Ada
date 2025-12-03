@@ -7,19 +7,6 @@ const produtos = [
 const mapaProdutos = new Map();
 produtos.forEach(p => mapaProdutos.set(p.id, p));
 
-function filtrarProdutoPreco(min, max) {
-  let filtro = produtos.filter(
-    (produto) => produto.preco >= min && produto.preco <= max
-  );
-  console.log(filtro);
-}
-
-function atualizarEstoque(id, delta) {
-  let produtof = produtos.find((produto) => produto.id == id);
-  produtof.estoque += delta;
-  console.log(produtof);
-}
-
 function listar() {
   return produtos;
 }
@@ -38,6 +25,19 @@ console.log("Lista de produtos:");
 console.log(listar());
 console.log("Produto desejado:");
 console.log(buscarPorNome("Xampu"));
+
+function filtrarProdutoPreco(min, max) {
+  let filtro = produtos.filter(
+    (produto) => produto.preco >= min && produto.preco <= max
+  );
+  console.log(filtro);
+}
+
+function atualizarEstoque(id, delta) {
+  let produtof = produtos.find((produto) => produto.id == id);
+  produtof.estoque += delta;
+  console.log(produtof);
+}
 
 //CARRINHO
 
