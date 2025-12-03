@@ -77,7 +77,7 @@ function adicionar(mapCarrinho, produtoId, qtd) {
   if (mapCarrinho.size === 0) {
     mapCarrinho.set(produtoId, { produtoId: produtoId, quantidade: qtd });
       return;
-    }
+  }
 
   const produtoNoCarrinho = mapCarrinho.get(produtoId);
 
@@ -177,21 +177,18 @@ console.log("Produtos ordenados por preço:", produtosOrdenados);
 
 //----HISTORICO----
 
-const carrinhoMap1 = new Map([
-  [1, { produtoId: 1, quantidade: 2 }],
-  [2, { produtoId: 2, quantidade: 1 }],
-  [3, { produtoId: 3, quantidade: 1 }]
-]);
+const carrinhoMap1 = new Map();
+adicionar(carrinhoMap1, 1, 2);
+adicionar(carrinhoMap1, 2, 1);
+adicionar(carrinhoMap1, 3, 1);  
 
-const carrinhoMap2 = new Map([
-  [1, { produtoId: 1, quantidade: 3 }],
-  [2, { produtoId: 2, quantidade: 2 }]  
-]);
+const carrinhoMap2 = new Map();
+adicionar(carrinhoMap2, 1, 3);
+adicionar(carrinhoMap2, 2, 2);
 
-const carrinhoMap3 = new Map([
-  [2, { produtoId: 2, quantidade: 1 }],
-  [3, { produtoId: 3, quantidade: 1 }]
-]);
+const carrinhoMap3 = new Map();
+adicionar(carrinhoMap3, 2, 1);
+adicionar(carrinhoMap3, 3, 1);
 
 const historico = new Map();
 historico.set(1, { total: calcularTotal(carrinhoMap1), itens: contarQuantidadeDeItens(carrinhoMap1) });
